@@ -345,11 +345,24 @@ class TokensLoader(BaseItemLoader):
             del self._chunk_filepaths[chunk_filepath]
 
         if chunk_filepath not in self._chunk_filepaths:
-            exists = os.path.exists(chunk_filepath) and os.stat(chunk_filepath).st_size > filesize_bytes
+            # exists = os.path.exists(chunk_filepath) and os.stat(chunk_filepath).st_size > filesize_bytes
+            prev_size = 0
+            
+            if os.path.exists(chunk_filepath):
+                cur_size = os.stat(chunk_filepath).st_size
+            else:
+                cur_size = 0
+                prev_size = -1
 
-            while not exists:
+            while cur_size != prev_size:
                 sleep(0.1)
-                exists = os.path.exists(chunk_filepath) and os.stat(chunk_filepath).st_size > filesize_bytes
+                prev_size = cur_size
+                if os.path.exists(chunk_filepath):
+                    cur_size = os.stat(chunk_filepath).st_size
+                else:
+                    cur_size = 0
+                    prev_size = -1
+                # exists = os.path.exists(chunk_filepath) and os.stat(chunk_filepath).st_size > filesize_bytes
 
             self._chunk_filepaths[chunk_filepath] = True
 
