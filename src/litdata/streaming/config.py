@@ -208,7 +208,9 @@ class ChunksConfig:
 
         for chunk_index, internal in enumerate(self.zero_based_roi):
             if internal[0] <= index < internal[-1]:
+                print("here1", chunk_index, internal)
                 real_index_to_read_from = self._intervals[chunk_index][1] + (index - internal[0])
+                print("here2", real_index_to_read_from, chunk_index)
                 return real_index_to_read_from, chunk_index
         raise ValueError(
             f"The provided index {index} didn't find a match within the chunk intervals {self._intervals}."
