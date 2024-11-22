@@ -16,6 +16,7 @@ import os
 import warnings
 from logging import Logger
 from queue import Empty, Queue
+from time import sleep
 from threading import Event, Thread
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -288,8 +289,10 @@ class BinaryReader:
                         index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes, self._encryption
                     )
                 except Exception as e:
-                    print(e)
+                    print("load chunk with",index.index, index.chunk_index, begin, filesize_bytes, "failed")
+                    print("file failed:", chunk_filepath)
                     item = None
+                    sleep(1)
         else:
             item = self._item_loader.load_item_from_chunk(
                 index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes
