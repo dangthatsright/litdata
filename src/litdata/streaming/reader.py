@@ -292,7 +292,7 @@ class BinaryReader:
                     print("load chunk with",index.index, index.chunk_index, begin, filesize_bytes, "failed")
                     print("file failed:", chunk_filepath)
                     item = None
-                    sleep(1)
+                    sleep(1000)
         else:
             item = self._item_loader.load_item_from_chunk(
                 index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes
