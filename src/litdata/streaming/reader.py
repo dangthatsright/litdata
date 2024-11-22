@@ -281,9 +281,15 @@ class BinaryReader:
         chunk_filepath, begin, filesize_bytes = self.config[index]
 
         if isinstance(self._item_loader, PyTreeLoader):
-            item = self._item_loader.load_item_from_chunk(
-                index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes, self._encryption
-            )
+            item = None
+            while item is None:
+                try:
+                    item = self._item_loader.load_item_from_chunk(
+                        index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes, self._encryption
+                    )
+                except Exception as e:
+                    print(e)
+                    item = None
         else:
             item = self._item_loader.load_item_from_chunk(
                 index.index, index.chunk_index, chunk_filepath, begin, filesize_bytes
